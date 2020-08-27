@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Appbriek Assessment</title>
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" type="image/png" href="./img/icons/favicon.png" />
+
+    <meta name="theme-color" content="#2A3443" />
+    <meta name="description" content="AppBriek Assessment." />
+
+    <!-- iOS -->
+    <link rel="apple-touch-icon" href="./img/icons/favicon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-status-bar-style" content="black" />
+    <meta name="mobile-web-app-title" content="AppBriek Assessment." />
+
+    <script>
+      if (!window.customElements) {
+        document.write("<!--");
+      }
+    </script>
+    <script src="./vendor/custom-elements-es5-adapter.js"></script>
+    <!-- ! DO NOT REMOVE THIS COMMENT, WE NEED ITS CLOSING MARKER -->
+
+    <!-- HERE Maps -->
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <script
+      src="https://js.api.here.com/v3/3.1/mapsjs-core.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://js.api.here.com/v3/3.1/mapsjs-service.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script
+      src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+  </head>
+
+  <body>
+    <header><h1>AppBriek Assessment</h1></header>
+    <nav><a href="/">Ritten</a> <a href="/add">Map</a></nav>
+
+    <main></main>
+    <script src="./vendor/webcomponents-loader.js"></script>
+  </body>
+</html>

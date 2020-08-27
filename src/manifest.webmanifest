@@ -1,0 +1,16 @@
+{
+  "name": "AppBriek Assessment.",
+  "short_name": "AppBriek",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#00083f",
+  "description": "AppBriek Assessment.",
+  "theme_color": "#00083f",
+  "icons": [
+    {
+      "src": "./img/icons/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
