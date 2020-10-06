@@ -1,5 +1,5 @@
 import "./styles.css";
-import "./views/ritten-view.js";
+import "./views/map-view.js";
 import { Router } from "@vaadin/router";
 
 window.addEventListener("load", () => {
@@ -13,23 +13,9 @@ function initRouter() {
   router.setRoutes([
     {
       path: "/",
-      component: "ritten-view",
-    },
-    {
-      path: "/add",
-      component: "rit-toevoegen-view",
+      component: "map-view",
       action: () =>
-        import(
-          /* webpackChunkName: "rit-toevoegen-view" */ "./views/rit-toevoegen-view"
-        ),
-    },
-    {
-      path: "(.*)",
-      component: "not-found-view",
-      action: () =>
-        import(
-          /* webpackChunkName: "not-found-view" */ "./views/not-found-view"
-        ),
+        import(/* webpackChunkName: "map-view" */ "./views/map-view"),
     },
   ]);
 }
