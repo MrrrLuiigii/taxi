@@ -1,7 +1,7 @@
 import { html } from "lit-element";
 import { BaseView } from "./base-view.js";
 
-import hereMapComponent from "../components/here-maps-components";
+import "../components/here-maps-components";
 
 const mapType = {
   HEREMAPS: "HereMaps",
@@ -19,12 +19,6 @@ class MapView extends BaseView {
     super();
     this.mapType = mapType.HEREMAPS;
   }
-
-  // firstUpdated() {
-  //   if (this.mapType == "HERE") {
-  //     loadHEREMap;
-  //   }
-  // }
 
   toggleMapType() {
     this.mapType === mapType.HEREMAPS
