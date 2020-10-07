@@ -35,7 +35,7 @@ class MapView extends BaseView {
   render() {
     return html`
       <div class="container">
-        <button @click="${this.toggleMapType}">${this.mapType}</button>
+        <button @click="${this.toggleMapType}">Toggle map type</button>
         <div class="mapContainer">
           ${this.mapType === mapType.HEREMAPS
             ? html`<here-maps-component></here-maps-component>`
