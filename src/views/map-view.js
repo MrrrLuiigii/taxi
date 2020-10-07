@@ -34,7 +34,7 @@ class MapView extends BaseView {
         <div class="mapContainer">
           ${this.mapType === mapType.HEREMAPS
             ? html`<here-maps-component></here-maps-component>`
-            : html`<div>MAPBOX component not implemented yet.</div>`}
+            : html`<map-box-component></map-box-component>`}
         </div>
       </div>
 
