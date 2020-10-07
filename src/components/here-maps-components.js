@@ -4,6 +4,7 @@ import { BaseView } from "../views/base-view.js";
 class HereMapsComponent extends BaseView {
   static get properties() {
     return {
+      map: {},
       rit: {
         id: { type: Number },
         datumTijd: Date.now(),
@@ -15,8 +16,6 @@ class HereMapsComponent extends BaseView {
       },
     };
   }
-
-  stateChanged(state) {}
 
   firstUpdated() {
     this.loadHEREMap();
@@ -57,8 +56,8 @@ class HereMapsComponent extends BaseView {
     this.map.setCenter({ lat: 51.477491, lng: 5.704076 });
   }
 
-  addMarker() {
-    var homeMarker = new H.map.Marker({ lat: 51.477491, lng: 5.704076 });
+  addMarker(lat, lng) {
+    var homeMarker = new H.map.Marker({ lat, lng });
     this.map.addObject(homeMarker);
   }
 
@@ -73,12 +72,25 @@ class HereMapsComponent extends BaseView {
     this.map.addObject(locationMarker);
   }
 
+  getCurrentLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        this.addMarker(lat, lng);
+      });
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }
+
   render() {
     return html`
       <button @click="${this.addMarker}">ADD MARKER</button>
       <button @click="${this.moveMapToBerlin}">MOVE TO BERLIN</button>
       <button @click="${this.moveMapToHome}">MOVE TO HOME</button>
       <button @click="${this.taxiNeeded}">CALL TAXI</button>
+      <button @click="${this.getCurrentLocation}">Show my location</button>
 
       <div style="width: 640px; height: 480px" id="mapContainer"></div>
 
