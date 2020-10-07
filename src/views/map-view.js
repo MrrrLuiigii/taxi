@@ -1,7 +1,8 @@
 import { html } from "lit-element";
 import { BaseView } from "./base-view.js";
 
-import "../components/here-maps-components";
+import "../components/here-maps-component";
+import "../components/map-box-component";
 
 const mapType = {
   HEREMAPS: "HereMaps",
