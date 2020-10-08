@@ -1,12 +1,35 @@
 import { html } from "lit-element";
 import { BaseView } from "../views/base-view.js";
 
+import { method } from "../views/map-view.js";
+
 class HereMapsComponent extends BaseView {
   static get properties() {
     return {
       map: {},
       platform: {},
     };
+  }
+
+  constructor() {
+    super();
+    this.addEventListener("HereMaps:ActionEvent", (event) => {
+      console.log("listening to the event");
+      switch (event.detail.method) {
+        case method.getCurrentLocation:
+          this.getCurrentLocation();
+          break;
+        case method.searchAddress:
+          this.searchAddress();
+          break;
+        case method.planRoute:
+          this.planRoute();
+          break;
+        case method.clearMap:
+          this.clearMap();
+          break;
+      }
+    });
   }
 
   firstUpdated() {
@@ -216,75 +239,15 @@ class HereMapsComponent extends BaseView {
 
   render() {
     return html`
-      <div class="formContainer">
-        <div class="flexColumn form">
-          <h3>Search address</h3>
-
-          <input id="addressSearch" />
-          <div class="flexRow">
-            <button class="flexButton" @click="${this.getCurrentLocation}">
-              Find current location
-            </button>
-            <button class="flexButton" @click="${this.searchAddress}">
-              Search
-            </button>
-          </div>
-        </div>
-
-        <div class="flexColumn form">
-          <h3>Plan route</h3>
-          <label>From:</label> <input id="addressFrom" /> <label>To:</label>
-          <input id="addressTo" />
-          <div class="flexRow">
-            <button class="flexButton" @click="${this.clearMap}">Clear</button>
-            <button class="flexButton" @click="${this.planRoute}">Plan</button>
-          </div>
-        </div>
-      </div>
-
-      <div style="width: 640px; height: 480px" id="mapContainer"></div>
+      <div id="mapContainer"></div>
 
       <style>
         #mapContainer {
-          border: 2px solid var(--dark-color);
-          border-radius: 10px;
-        }
-
-        h3 {
-          margin-top: 0;
-        }
-
-        .formContainer {
-          display: flex;
-        }
-
-        .flexColumn {
-          display: flex;
-          flex-direction: column;
+          width: 640px;
+          height: 480px;
 
           border: 2px solid var(--dark-color);
           border-radius: 10px;
-          margin: 2em 0;
-          padding: 1em;
-          margin-right: 1em;
-        }
-
-        .flexRow {
-          display: flex;
-          justify-content: space-between;
-        }
-
-        .form {
-          width: 20%;
-          background-color: var(--light-color);
-        }
-
-        .flexButton {
-          margin: 1em 0;
-        }
-
-        button {
-          min-width: 5em;
         }
       </style>
     `;
