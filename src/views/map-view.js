@@ -9,13 +9,6 @@ const mapType = {
   MAPBOX: "MapBox",
 };
 
-const mapMethod = {
-  getCurrentLocation: "getCurrentLocation",
-  searchAddress: "searchAddress",
-  clearMap: "clearMap",
-  planRoute: "planRoute",
-};
-
 class MapView extends BaseView {
   static get properties() {
     return {
@@ -41,41 +34,6 @@ class MapView extends BaseView {
       : (this.mapType = mapType.HEREMAPS);
   }
 
-  triggerChild(method) {
-    const mapComponent =
-      this.mapType === mapType.HEREMAPS
-        ? this.hereMapsComponent
-        : this.mapBoxComponent;
-
-    switch (method) {
-      case mapMethod.getCurrentLocation:
-        mapComponent.getCurrentLocation();
-        break;
-
-      case mapMethod.searchAddress:
-        const address = this.shadowRoot
-          .getElementById("addressSearch")
-          .value.toString();
-        mapComponent.searchAddress(address);
-        this.shadowRoot.getElementById("addressSearch").value = "";
-        break;
-
-      case mapMethod.planRoute:
-        const from = this.shadowRoot
-          .getElementById("addressFrom")
-          .value.toString();
-        const to = this.shadowRoot.getElementById("addressTo").value.toString();
-        mapComponent.planRoute(from, to);
-        this.shadowRoot.getElementById("addressFrom").value = "";
-        this.shadowRoot.getElementById("addressTo").value = "";
-        break;
-
-      case mapMethod.clearMap:
-        mapComponent.clearMap();
-        break;
-    }
-  }
-
   render() {
     return html`
       <div class="container">
@@ -83,48 +41,6 @@ class MapView extends BaseView {
           Toggle map type
         </button>
         <div class="mapContainer">
-          <div class="formContainer">
-            <div class="flexColumn form">
-              <h3>Search address</h3>
-
-              <input id="addressSearch" />
-              <div class="flexRow">
-                <button
-                  class="flexButton customButton"
-                  @click="${() =>
-                    this.triggerChild(mapMethod.getCurrentLocation)}"
-                >
-                  Find current location
-                </button>
-                <button
-                  class="flexButton customButton"
-                  @click="${() => this.triggerChild(mapMethod.searchAddress)}"
-                >
-                  Search
-                </button>
-              </div>
-            </div>
-
-            <div class="flexColumn form">
-              <h3>Plan route</h3>
-              <label>From:</label> <input id="addressFrom" /> <label>To:</label>
-              <input id="addressTo" />
-              <div class="flexRow">
-                <button
-                  class="flexButton customButton"
-                  @click="${() => this.triggerChild(mapMethod.clearMap)}"
-                >
-                  Clear
-                </button>
-                <button
-                  class="flexButton customButton"
-                  @click="${() => this.triggerChild(mapMethod.planRoute)}"
-                >
-                  Plan
-                </button>
-              </div>
-            </div>
-          </div>
           ${this.mapType === mapType.HEREMAPS
             ? html`<here-maps-component id="hereMaps"></here-maps-component>`
             : html`<map-box-component id="mapBox"></map-box-component>`}

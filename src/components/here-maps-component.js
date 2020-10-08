@@ -22,7 +22,7 @@ class HereMapsComponent extends BaseView {
     var defaultLayers = this.platform.createDefaultLayers();
 
     this.map = new H.Map(
-      this.shadowRoot.getElementById("mapContainer"),
+      document.getElementById("mapContainer"),
       defaultLayers.vector.normal.map,
       {
         zoom: 10,
@@ -85,23 +85,31 @@ class HereMapsComponent extends BaseView {
     }
   }
 
-  async searchAddress(address) {
+  async searchAddress() {
     this.clearMap();
 
+    const address = document.getElementById("addressSearch").value.toString();
     const locations = await this.geocode(address);
     this.addMarker(locations.items[0].position);
+
+    document.getElementById("addressSearch").value = "";
   }
 
-  async planRoute(from, to) {
+  async planRoute() {
     this.clearMap();
 
+    const from = document.getElementById("addressFrom").value.toString();
     const fromLocations = await this.geocode(from);
     const origin = `${fromLocations.items[0].position.lat},${fromLocations.items[0].position.lng}`;
 
+    const to = document.getElementById("addressTo").value.toString();
     const toLocations = await this.geocode(to);
     const destination = `${toLocations.items[0].position.lat},${toLocations.items[0].position.lng}`;
 
     this.calculateRouteFromAtoB(origin, destination);
+
+    document.getElementById("addressFrom").value = "";
+    document.getElementById("addressTo").value = "";
   }
 
   calculateRouteFromAtoB(origin, destination) {
@@ -204,11 +212,51 @@ class HereMapsComponent extends BaseView {
       for (let i = 0; i < this.map.getObjects().length; i++) {
         this.map.removeObject(this.map.getObjects()[i]);
       }
+      //also remove the manouvers
+      for (let i = 0; i < this.map.getObjects().length; i++) {
+        this.map.removeObject(this.map.getObjects()[i]);
+      }
     }
   }
 
   render() {
     return html`
+      <div class="formContainer">
+        <div class="flexColumn form">
+          <h3>Search address</h3>
+
+          <input id="addressSearch" />
+          <div class="flexRow">
+            <button
+              class="flexButton customButton"
+              @click="${this.getCurrentLocation}"
+            >
+              Find current location
+            </button>
+            <button
+              class="flexButton customButton"
+              @click="${this.searchAddress}"
+            >
+              Search
+            </button>
+          </div>
+        </div>
+
+        <div class="flexColumn form">
+          <h3>Plan route</h3>
+          <label>From:</label> <input id="addressFrom" /> <label>To:</label>
+          <input id="addressTo" />
+          <div class="flexRow">
+            <button class="flexButton customButton" @click="${this.clearMap}">
+              Clear
+            </button>
+            <button class="flexButton customButton" @click="${this.planRoute}">
+              Plan
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div id="mapContainer"></div>
 
       <style>
