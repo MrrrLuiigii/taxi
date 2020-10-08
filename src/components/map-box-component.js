@@ -19,11 +19,21 @@ class MapBoxComponent extends BaseView {
     // mapboxgl.accessToken = process.env.MAPBOX_API_KEY;
 
     this.map = new mapboxgl.Map({
-      container: "mapContainer",
+      container: this.shadowRoot.getElementById("mapContainer"),
       style: "mapbox://styles/mapbox/streets-v11",
       center: [5.704076, 51.477491],
       zoom: 10,
     });
+
+    // this.map.addControl(
+    //   new MapboxGeocoder(
+    //     {
+    //       accessToken: mapboxgl.accessToken,
+    //       mapboxgl: mapboxgl,
+    //     },
+    //     "top-right"
+    //   )
+    // );
   }
 
   render() {
