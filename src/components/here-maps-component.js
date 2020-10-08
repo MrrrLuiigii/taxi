@@ -1,35 +1,12 @@
 import { html } from "lit-element";
 import { BaseView } from "../views/base-view.js";
 
-import { method } from "../views/map-view.js";
-
 class HereMapsComponent extends BaseView {
   static get properties() {
     return {
       map: {},
       platform: {},
     };
-  }
-
-  constructor() {
-    super();
-    this.addEventListener("HereMaps:ActionEvent", (event) => {
-      console.log("listening to the event");
-      switch (event.detail.method) {
-        case method.getCurrentLocation:
-          this.getCurrentLocation();
-          break;
-        case method.searchAddress:
-          this.searchAddress();
-          break;
-        case method.planRoute:
-          this.planRoute();
-          break;
-        case method.clearMap:
-          this.clearMap();
-          break;
-      }
-    });
   }
 
   firstUpdated() {
@@ -45,7 +22,7 @@ class HereMapsComponent extends BaseView {
     var defaultLayers = this.platform.createDefaultLayers();
 
     this.map = new H.Map(
-      document.getElementById("mapContainer"),
+      this.shadowRoot.getElementById("mapContainer"),
       defaultLayers.vector.normal.map,
       {
         zoom: 10,
@@ -108,30 +85,23 @@ class HereMapsComponent extends BaseView {
     }
   }
 
-  async searchAddress() {
+  async searchAddress(address) {
     this.clearMap();
 
-    const address = document.getElementById("addressSearch").value.toString();
     const locations = await this.geocode(address);
     this.addMarker(locations.items[0].position);
-    document.getElementById("addressSearch").value = "";
   }
 
-  async planRoute() {
+  async planRoute(from, to) {
     this.clearMap();
 
-    const from = document.getElementById("addressFrom").value.toString();
     const fromLocations = await this.geocode(from);
     const origin = `${fromLocations.items[0].position.lat},${fromLocations.items[0].position.lng}`;
 
-    const to = document.getElementById("addressTo").value.toString();
     const toLocations = await this.geocode(to);
     const destination = `${toLocations.items[0].position.lat},${toLocations.items[0].position.lng}`;
 
     this.calculateRouteFromAtoB(origin, destination);
-
-    document.getElementById("addressFrom").value = "";
-    document.getElementById("addressTo").value = "";
   }
 
   calculateRouteFromAtoB(origin, destination) {

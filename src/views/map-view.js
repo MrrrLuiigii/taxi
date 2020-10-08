@@ -9,7 +9,7 @@ const mapType = {
   MAPBOX: "MapBox",
 };
 
-export const method = {
+const mapMethod = {
   getCurrentLocation: "getCurrentLocation",
   searchAddress: "searchAddress",
   clearMap: "clearMap",
@@ -20,12 +20,19 @@ class MapView extends BaseView {
   static get properties() {
     return {
       mapType: { type: String },
+      hereMapsComponent: { type: Object },
+      mapBoxComponent: { type: Object },
     };
   }
 
   constructor() {
     super();
-    this.mapType = mapType.HEREMAPS;
+    this.mapType = mapType.MAPBOX;
+  }
+
+  firstUpdated() {
+    this.hereMapsComponent = this.shadowRoot.getElementById("hereMaps");
+    this.mapBoxComponent = this.shadowRoot.getElementById("mapBox");
   }
 
   toggleMapType() {
@@ -35,22 +42,46 @@ class MapView extends BaseView {
   }
 
   triggerChild(method) {
-    console.log(this.shadowRoot);
-    const hereMapsComponent = this.shadowRoot.getElementById("cld");
-    hereMapsComponent.getCurrentLocation();
-    // this.dispatchEvent(
-    //   new CustomEvent(`${this.mapType}:ActionEvent`, {
-    //     detail: {
-    //       method,
-    //     },
-    //   })
-    // );
+    const mapComponent =
+      this.mapType === mapType.HEREMAPS
+        ? this.hereMapsComponent
+        : this.mapBoxComponent;
+
+    switch (method) {
+      case mapMethod.getCurrentLocation:
+        mapComponent.getCurrentLocation();
+        break;
+
+      case mapMethod.searchAddress:
+        const address = this.shadowRoot
+          .getElementById("addressSearch")
+          .value.toString();
+        mapComponent.searchAddress(address);
+        this.shadowRoot.getElementById("addressSearch").value = "";
+        break;
+
+      case mapMethod.planRoute:
+        const from = this.shadowRoot
+          .getElementById("addressFrom")
+          .value.toString();
+        const to = this.shadowRoot.getElementById("addressTo").value.toString();
+        mapComponent.planRoute(from, to);
+        this.shadowRoot.getElementById("addressFrom").value = "";
+        this.shadowRoot.getElementById("addressTo").value = "";
+        break;
+
+      case mapMethod.clearMap:
+        mapComponent.clearMap();
+        break;
+    }
   }
 
   render() {
     return html`
       <div class="container">
-        <button @click="${this.toggleMapType}">Toggle map type</button>
+        <button class="customButton" @click="${this.toggleMapType}">
+          Toggle map type
+        </button>
         <div class="mapContainer">
           <div class="formContainer">
             <div class="flexColumn form">
@@ -59,14 +90,15 @@ class MapView extends BaseView {
               <input id="addressSearch" />
               <div class="flexRow">
                 <button
-                  class="flexButton"
-                  @click="${() => this.triggerChild(method.getCurrentLocation)}"
+                  class="flexButton customButton"
+                  @click="${() =>
+                    this.triggerChild(mapMethod.getCurrentLocation)}"
                 >
                   Find current location
                 </button>
                 <button
-                  class="flexButton"
-                  @click="${() => this.triggerChild(method.searchAddress)}"
+                  class="flexButton customButton"
+                  @click="${() => this.triggerChild(mapMethod.searchAddress)}"
                 >
                   Search
                 </button>
@@ -79,14 +111,14 @@ class MapView extends BaseView {
               <input id="addressTo" />
               <div class="flexRow">
                 <button
-                  class="flexButton"
-                  @click="${() => this.triggerChild(method.clearMap)}"
+                  class="flexButton customButton"
+                  @click="${() => this.triggerChild(mapMethod.clearMap)}"
                 >
                   Clear
                 </button>
                 <button
-                  class="flexButton"
-                  @click="${() => this.triggerChild(method.planRoute)}"
+                  class="flexButton customButton"
+                  @click="${() => this.triggerChild(mapMethod.planRoute)}"
                 >
                   Plan
                 </button>
@@ -94,13 +126,13 @@ class MapView extends BaseView {
             </div>
           </div>
           ${this.mapType === mapType.HEREMAPS
-            ? html`<here-maps-component></here-maps-component>`
-            : html`<map-box-component></map-box-component>`}
+            ? html`<here-maps-component id="hereMaps"></here-maps-component>`
+            : html`<map-box-component id="mapBox"></map-box-component>`}
         </div>
       </div>
 
       <style>
-        button {
+        .customButton {
           border: none;
           height: 2em;
           background-color: var(--shade-color);
