@@ -1,7 +1,7 @@
 {
-  "name": "appbriek-assessment",
+  "name": "mapcomponents-poc",
   "version": "1.0.0",
-  "description": "Assessment for AppBriek: PWA.",
+  "description": "MapComponents PoC: PWA.",
   "main": "sw.js",
   "scripts": {
     "webpack": "webpack",
